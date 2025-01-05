@@ -70,6 +70,16 @@ Need to bind two volumes to the spark master and workers to make available your 
 | apps       | /opt/spark-apps | Used to make available your app's jars on all workers & master |
 | data       | /opt/spark-data | Used to make available your app's data on all workers & master |
 
+
+# Create Target DB in Postgres
+
+Connect to database from local machine and create a database and table.
+```
+psql -h localhost -p 5432 -U postgres
+
+create database mta_data;
+```
+
 # Run Sample applications
 
 ## NY Bus Stops Data [Pyspark]
@@ -82,6 +92,8 @@ The loaded table will contain the following structure:
 |-----------|------------|---------------------|------------|---------------------|-----------------------|----------------|-------------------|---------------------------------------|------------------------------|------------------------|---------------------|--------------|
 | 40.668602 | -73.986697 | 2014-08-01 04:00:01 | 469        | 4135.34710710144    | 1                     | IN_PROGRESS    | MTA NYCT_B63      | MTA NYCT_JG_C4-Weekday-141500_B63_123 | 2.63183804205619             | MTA_305423             | 2014-08-01 04:00:00 | 2014-08-01   |
 
+For sample, created one example CSV.
+
 To submit the app connect to one of the workers or the master and execute:
 
 ```sh
@@ -90,6 +102,14 @@ To submit the app connect to one of the workers or the master and execute:
 --driver-memory 1G \
 --executor-memory 1G \
 /opt/spark-apps/main.py
+```
+
+Connect to newly created database and check the data.
+
+```sh
+psql -h localhost -p 5432 -U postgres -d mta_data
+
+select * from mta_reports;
 ```
 
 ## MTA Bus Analytics[Scala]
@@ -134,4 +154,14 @@ apt update
 apt install python3-pip
 pip3 install pyspark
 pyspark
+```
+
+# For local development, just need to install pyspark and run the following code
+
+```
+pip install pyspark
+```
+
+```python
+python local_main.py
 ```
